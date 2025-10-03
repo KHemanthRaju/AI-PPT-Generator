@@ -1,12 +1,11 @@
 # Amazon Bedrock PowerPoint Generator
 
-An AI-powered system that automatically creates PowerPoint presentations by searching the web, generating slides, and emailing the results to users.
+An AI-powered system that automatically creates PowerPoint presentations by searching the web, generating slides, and getting the downloadable link.
 
 ## Features
 
 - **Web Search**: Uses Firecrawl to gather information from the internet
 - **PowerPoint Generation**: Creates professional PPTX files with multiple slides
-- **Email Delivery**: Sends download links via Amazon SNS
 - **Interactive Frontend**: Streamlit-based chat interface
 - **Real-time Tracing**: Shows AI agent decision-making process
 
@@ -15,7 +14,6 @@ An AI-powered system that automatically creates PowerPoint presentations by sear
 The system uses Amazon Bedrock Agents with three Lambda functions:
 1. `search-web` - Performs web searches using Firecrawl
 2. `create-pptx` - Generates PowerPoint files and uploads to S3
-3. `send-email` - Sends notification emails via SNS
 
 ## Quick Start
 
@@ -36,7 +34,7 @@ The system uses Amazon Bedrock Agents with three Lambda functions:
 
 4. **Run Frontend**
    ```bash
-   streamlit run frontend.py
+   streamlit run chatbot_frontend.py
    ```
 
 ## Usage Examples
@@ -51,8 +49,7 @@ The system uses Amazon Bedrock Agents with three Lambda functions:
 
 - `lambda_search_web.py` - Web search Lambda function
 - `lambda_create_pptx.py` - PowerPoint creation Lambda function  
-- `lambda_send_email.py` - Email notification Lambda function
-- `frontend.py` - Streamlit web interface
+- `chatbot_frontend.py` - Streamlit web interface
 - `create_lambda_layer.sh` - Script to create Lambda layer
 - `setup_instructions.md` - Detailed setup guide
 
