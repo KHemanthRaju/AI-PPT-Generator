@@ -59,9 +59,9 @@ The system uses Amazon Bedrock Agents with three Lambda functions:
 ## Requirements
 
 - AWS Account with Bedrock access
-- Firecrawl API key: `fc-0e333e0da7ea4b7f947478722c19b42b`
+- Firecrawl API key (set in environment variables)
 - Python 3.9+
-- Streamlit, boto3, firecrawl-py, python-pptx
+- Streamlit, boto3, python-pptx
 
 ## Cost Optimization
 
