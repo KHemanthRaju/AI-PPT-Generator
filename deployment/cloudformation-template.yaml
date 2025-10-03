@@ -1,0 +1,172 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'PowerPoint Generator Backend Infrastructure'
+
+Parameters:
+  BucketName:
+    Type: String
+    Default: ppt-generator-bucket
+    Description: S3 bucket name for storing presentations
+
+Resources:
+  # S3 Bucket
+  PPTBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${BucketName}-${AWS::AccountId}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # IAM Role for Lambda
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+      Policies:
+        - PolicyName: S3Access
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub "${PPTBucket.Arn}/*"
+        - PolicyName: BedrockAccess
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - bedrock:InvokeModel
+                Resource: "*"
+
+  # Lambda Layer (will be created separately)
+  # PPTLambdaLayer:
+  #   Type: AWS::Lambda::LayerVersion
+  #   Properties:
+  #     LayerName: ppt-dependencies
+  #     Description: Dependencies for PPT generator
+  #     Content:
+  #       ZipFile: |
+  #         # Placeholder - layer will be created manually
+  #     CompatibleRuntimes:
+  #       - python3.9
+
+  # Lambda Function
+  PPTGeneratorFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: ppt-generator-backend
+      Runtime: python3.9
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Timeout: 300
+      MemorySize: 512
+      Environment:
+        Variables:
+          S3_BUCKET_NAME: !Ref PPTBucket
+      # Layers:
+      #   - !Ref PPTLambdaLayer
+      Code:
+        ZipFile: |
+          import json
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': json.dumps('Deploy code manually')}
+
+  # API Gateway
+  PPTApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: ppt-generator-api
+      Description: API for PowerPoint Generator
+
+  PPTApiResource:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: !Ref PPTApi
+      ParentId: !GetAtt PPTApi.RootResourceId
+      PathPart: generate-ppt
+
+  PPTApiMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PPTApi
+      ResourceId: !Ref PPTApiResource
+      HttpMethod: POST
+      AuthorizationType: NONE
+      Integration:
+        Type: AWS_PROXY
+        IntegrationHttpMethod: POST
+        Uri: !Sub "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${PPTGeneratorFunction.Arn}/invocations"
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Origin: true
+
+  PPTApiOptionsMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref PPTApi
+      ResourceId: !Ref PPTApiResource
+      HttpMethod: OPTIONS
+      AuthorizationType: NONE
+      Integration:
+        Type: MOCK
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+            ResponseTemplates:
+              application/json: ''
+        RequestTemplates:
+          application/json: '{"statusCode": 200}'
+      MethodResponses:
+        - StatusCode: 200
+          ResponseParameters:
+            method.response.header.Access-Control-Allow-Headers: true
+            method.response.header.Access-Control-Allow-Methods: true
+            method.response.header.Access-Control-Allow-Origin: true
+
+  PPTApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    DependsOn:
+      - PPTApiMethod
+      - PPTApiOptionsMethod
+    Properties:
+      RestApiId: !Ref PPTApi
+      StageName: prod
+
+  LambdaApiPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref PPTGeneratorFunction
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${PPTApi}/*/POST/generate-ppt"
+
+Outputs:
+  ApiEndpoint:
+    Description: API Gateway endpoint URL
+    Value: !Sub "https://${PPTApi}.execute-api.${AWS::Region}.amazonaws.com/prod/generate-ppt"
+    Export:
+      Name: PPTGeneratorApiEndpoint
+
+  S3BucketName:
+    Description: S3 bucket name
+    Value: !Ref PPTBucket
+    Export:
+      Name: PPTGeneratorBucket

@@ -1,0 +1,79 @@
+# Amazon Bedrock PowerPoint Generator
+
+An AI-powered system that automatically creates PowerPoint presentations by searching the web, generating slides, and emailing the results to users.
+
+## Features
+
+- **Web Search**: Uses Firecrawl to gather information from the internet
+- **PowerPoint Generation**: Creates professional PPTX files with multiple slides
+- **Email Delivery**: Sends download links via Amazon SNS
+- **Interactive Frontend**: Streamlit-based chat interface
+- **Real-time Tracing**: Shows AI agent decision-making process
+
+## Architecture
+
+The system uses Amazon Bedrock Agents with three Lambda functions:
+1. `search-web` - Performs web searches using Firecrawl
+2. `create-pptx` - Generates PowerPoint files and uploads to S3
+3. `send-email` - Sends notification emails via SNS
+
+## Quick Start
+
+1. **Setup AWS Resources**
+   - Follow instructions in `setup_instructions.md`
+   - Deploy Lambda functions using provided code
+   - Configure Bedrock agent with action groups
+
+2. **Create Lambda Layer**
+   ```bash
+   ./create_lambda_layer.sh
+   ```
+
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Run Frontend**
+   ```bash
+   streamlit run frontend.py
+   ```
+
+## Usage Examples
+
+```
+"Research the latest AI trends and create a PowerPoint"
+"Create slides about Amazon Bedrock features"
+"Research quantum computing and make a presentation"
+```
+
+## Files
+
+- `lambda_search_web.py` - Web search Lambda function
+- `lambda_create_pptx.py` - PowerPoint creation Lambda function  
+- `lambda_send_email.py` - Email notification Lambda function
+- `frontend.py` - Streamlit web interface
+- `create_lambda_layer.sh` - Script to create Lambda layer
+- `setup_instructions.md` - Detailed setup guide
+
+## Requirements
+
+- AWS Account with Bedrock access
+- Firecrawl API key: `fc-0e333e0da7ea4b7f947478722c19b42b`
+- Python 3.9+
+- Streamlit, boto3, firecrawl-py, python-pptx
+
+## Cost Optimization
+
+The system uses serverless architecture to minimize costs:
+- Lambda functions only run when triggered
+- S3 storage for generated files
+- SNS for email notifications
+- Bedrock pay-per-use pricing
+
+## Security Notes
+
+- Store API keys in environment variables
+- Use IAM roles with minimal required permissions
+- Enable MFA on AWS root account
+- Consider using AWS Secrets Manager for production

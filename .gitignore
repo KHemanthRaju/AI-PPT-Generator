@@ -1,0 +1,56 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.temp
+response.json
+test_payload.json
+*.zip
+lambda-update.zip
+pptx-layer*.zip
+
+# Environment variables
+.env
+.env.local
+
+# Generated presentations
+presentation_*.pptx
+
+# Node modules
+node_modules/
+amplify-frontend/node_modules/
+amplify-frontend/build/
