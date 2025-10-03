@@ -66,17 +66,17 @@ if prompt := st.chat_input("Create a presentation about AI trends with these URL
                                 )
                             import os
                             os.unlink(pptx_file)
-                            response_text = "I've created your PowerPoint presentation! Click the download button above."
+                            response_text = "I've created your PowerPoint presentation!"
                         else:
                             response_text = "Sorry, I couldn't create the presentation. Please try again."
                     
-                    # Show slide preview
-                    if 'slides' in result:
-                        st.markdown("**📋 Slide Preview:**")
-                        for i, slide in enumerate(result['slides']['slides'], 1):
-                            st.markdown(f"**{i}. {slide['title']}**")
-                            for bullet in slide['content']:
-                                st.markdown(f"• {bullet}")
+                    # # Show slide preview
+                    # if 'slides' in result:
+                    #     st.markdown("**📋 Slide Preview:**")
+                    #     for i, slide in enumerate(result['slides']['slides'], 1):
+                    #         st.markdown(f"**{i}. {slide['title']}**")
+                    #         for bullet in slide['content']:
+                    #             st.markdown(f"• {bullet}")
                 else:
                     response_text = f"Error: {response.text}"
                     st.error(response_text)
