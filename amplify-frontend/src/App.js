@@ -7,7 +7,7 @@ function App() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const API_URL = 'https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt';
 
   const extractTopicAndUrls = (text) => {
     const lines = text.split('\n');

@@ -1,7 +1,7 @@
 // Quick CORS fix - test this URL directly in browser
 const testAPI = async () => {
   try {
-    const response = await fetch('https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt', {
+    const response = await fetch(process.env.REACT_APP_API_URL || 'https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

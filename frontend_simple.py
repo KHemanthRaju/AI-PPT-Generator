@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import os
 from create_pptx_local import create_pptx_from_slides
 
 st.title("AI PowerPoint Generator")
@@ -24,7 +25,7 @@ if st.button("Generate PowerPoint"):
         with st.spinner("Generating PowerPoint..."):
             try:
                 # Call your deployed Lambda function
-                lambda_url = "https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt"
+                lambda_url = os.environ.get('API_URL', 'https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt')
                 
                 response = requests.post(
                     lambda_url,

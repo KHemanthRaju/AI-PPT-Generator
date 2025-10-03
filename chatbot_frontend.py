@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import os
 from create_pptx_local import create_pptx_from_slides
 
 st.title("🤖 AI PowerPoint Generator")
@@ -41,7 +42,7 @@ if prompt := st.chat_input("Create a presentation about AI trends with these URL
             try:
                 # Call API
                 response = requests.post(
-                    "https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt",
+                    os.environ.get('API_URL', 'https://lorf2f330g.execute-api.us-west-2.amazonaws.com/prod/generate-ppt'),
                     json={"description": topic, "urls": urls, "slide_count": slide_count},
                     headers={'Content-Type': 'application/json'}
                 )

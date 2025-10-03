@@ -6,7 +6,7 @@ import uuid
 import os
 
 # Configuration
-FIRECRAWL_API_KEY = "fc-0e333e0da7ea4b7f947478722c19b42b"
+FIRECRAWL_API_KEY = os.environ.get('FIRECRAWL_API_KEY', 'your-api-key-here')
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 
 def lambda_handler(event, context):
