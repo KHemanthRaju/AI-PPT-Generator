@@ -15,23 +15,19 @@ An AI-powered system that automatically creates PowerPoint presentations by sear
 - **Amazon Bedrock** - AI agent orchestration and LLM integration
 - **AWS Lambda** - Serverless compute for backend functions
 - **Amazon S3** - File storage for generated PowerPoint presentations
-- **Amazon SNS** - Email notification service
 - **Amazon API Gateway** - REST API endpoints
 - **Python 3.9+** - Backend programming language
 
 ### Frontend
 - **Streamlit** - Interactive web interface
-- **React.js** - Alternative frontend (Amplify deployment)
 - **AWS Amplify** - Frontend hosting and deployment
 
 ### Libraries & APIs
 - **python-pptx** - PowerPoint file generation
 - **boto3** - AWS SDK for Python
 - **Firecrawl API** - Web scraping and content extraction
-- **requests** - HTTP client library
 
 ### Development & Deployment
-- **Docker** - Containerization (Dev Container support)
 - **AWS CloudFormation** - Infrastructure as Code
 - **Git** - Version control
 - **Bash** - Deployment scripts
@@ -92,7 +88,6 @@ The system uses Amazon Bedrock Agents with three Lambda functions:
 The system uses serverless architecture to minimize costs:
 - Lambda functions only run when triggered
 - S3 storage for generated files
-- SNS for email notifications
 - Bedrock pay-per-use pricing
 
 ## Security Notes
