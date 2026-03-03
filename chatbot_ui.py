@@ -47,102 +47,6 @@ if "uploaded_document" not in st.session_state:
     st.session_state.uploaded_document = None
 if "document_text" not in st.session_state:
     st.session_state.document_text = None
-if "theme" not in st.session_state:
-    st.session_state.theme = "light"
-
-# Theme configuration - WCAG AA compliant colors
-THEME_COLORS = {
-    "light": {
-        "bg": "#ffffff",
-        "secondary_bg": "#f8f9fa",
-        "text": "#1a1a1a",
-        "text_secondary": "#4a4a4a",
-        "border": "#e0e0e0",
-        "primary": "#667eea",
-        "success": "#11998e",
-    },
-    "dark": {
-        "bg": "#1e1e1e",
-        "secondary_bg": "#2d2d2d",
-        "text": "#e8e8e8",
-        "text_secondary": "#b8b8b8",
-        "border": "#404040",
-        "primary": "#7b8ff5",
-        "success": "#38ef7d",
-    }
-}
-
-theme = THEME_COLORS[st.session_state.theme]
-
-# Apply theme CSS
-st.markdown(f"""
-<style>
-    /* Main container */
-    .main {{
-        background-color: {theme['bg']};
-        color: {theme['text']};
-    }}
-
-    /* Sidebar */
-    [data-testid="stSidebar"] {{
-        background-color: {theme['secondary_bg']};
-        border-right: 1px solid {theme['border']};
-    }}
-
-    /* Text elements */
-    h1, h2, h3, h4, h5, h6 {{
-        color: {theme['text']} !important;
-    }}
-
-    p, label, span {{
-        color: {theme['text_secondary']} !important;
-    }}
-
-    /* Chat messages */
-    .stChatMessage {{
-        background-color: {theme['secondary_bg']};
-        border: 1px solid {theme['border']};
-    }}
-
-    /* Input fields */
-    .stTextInput input, .stChatInput input {{
-        background-color: {theme['secondary_bg']};
-        color: {theme['text']};
-        border-color: {theme['border']};
-    }}
-
-    /* File uploader */
-    [data-testid="stFileUploader"] {{
-        background-color: {theme['secondary_bg']};
-        border-color: {theme['border']};
-    }}
-
-    /* Buttons */
-    .stButton>button {{
-        background: linear-gradient(135deg, {theme['primary']} 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-    }}
-
-    /* Slider */
-    .stSlider {{
-        color: {theme['primary']};
-    }}
-
-    /* Success messages */
-    .success {{
-        background-color: {theme['success']};
-    }}
-
-    /* Expander */
-    .streamlit-expanderHeader {{
-        background-color: {theme['secondary_bg']};
-        color: {theme['text']};
-    }}
-</style>
-""", unsafe_allow_html=True)
 
 # Header
 st.title("🤖 AI PowerPoint Generator Chatbot")
@@ -150,18 +54,6 @@ st.markdown("### Chat with me to create amazing presentations!")
 
 # Sidebar
 with st.sidebar:
-    # Theme toggle button
-    col1, col2 = st.columns([3, 1])
-    with col1:
-        st.markdown("## 🎨 Theme")
-    with col2:
-        theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
-        if st.button(theme_icon, key="theme_toggle", help="Toggle dark/light mode"):
-            st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
-            st.rerun()
-
-    st.markdown("---")
-
     st.markdown("## 📖 About")
     with st.expander("ℹ️ Click to learn more"):
         st.markdown("""
